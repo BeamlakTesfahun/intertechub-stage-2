@@ -10,7 +10,7 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 // db connection
-connectDB();
+await connectDB();
 
 // create express app
 const app = express();
