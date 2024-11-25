@@ -1,6 +1,6 @@
 # Books Collection RESTful API
 
-A RESTful API for managing a "Books Collection", developed using Node.js and MongoDB. This API must allow users to perform CRUD operations on books while ensuring proper data validation.
+A RESTful API for managing a "Books Collection", developed using Node.js and MongoDB. This API allow users to perform CRUD operations on books while ensuring proper data validation.
 
 ## Features
 
