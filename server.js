@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/dbConnection.js";
 import bookRoute from "./routes/bookRoute.js";
+import authRoute from "./routes/authRoute.js";
 
 // load env variables
 dotenv.config();
@@ -22,6 +23,7 @@ app.use(cors());
 app.use(express.json());
 
 // routes
+app.use("/auth", authRoute);
 app.use("/books", bookRoute);
 
 app.listen(PORT, () => {
