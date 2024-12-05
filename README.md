@@ -1,6 +1,6 @@
 # Books Collection RESTful API
 
-A RESTful API for managing a "Books Collection", eveloped using Node.js and MongoDB. This API must allow users to perform CRUD operations on books while ensuring proper data validation.
+A RESTful API for managing a "Books Collection", developed using Node.js and MongoDB. This API allow users to perform CRUD operations on books while ensuring proper data validation.
 
 ## Features
 
@@ -32,10 +32,10 @@ A RESTful API for managing a "Books Collection", eveloped using Node.js and Mong
    npm install
 ```
 
-3. Create a .env file and specify the port
+3. Create a .env file and specify the port and MongoDB URI
 
 ```env
-   PORT=3000
+   PORT
    MONGO_URI
 ```
 
