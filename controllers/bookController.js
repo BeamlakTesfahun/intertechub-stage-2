@@ -133,9 +133,10 @@ const deleteBook = async (req, res) => {
 
 // book recommendation
 const recommendBook = async (req, res) => {
+  const { userId } = req.user;
   try {
-    // count the total number of books in the db
-    const total = await Book.countDocuments();
+    // count the total number of books created by the user
+    const total = await Book.countDocuments({ createdBy: userId });
 
     if (total === 0) {
       return res
@@ -159,17 +160,24 @@ const recommendBook = async (req, res) => {
 // marks book as favorite
 const favoriteBook = async (req, res) => {
   const { id } = req.params;
+  const { userId } = req.user;
 
   try {
-    const book = await Book.findByIdAndUpdate(
+    const book = await Book.findByIdAndUpdate({
       id,
-      { favorite: true },
-      { new: true }
-    );
+      createdBy: userId,
+    });
 
     if (!book) {
-      return res.status(StatusCodes.NOT_FOUND).json({ msg: "Book not found" });
+      return res.status(StatusCodes.NOT_FOUND).json({
+        msg: "Book not found or is not created by the authenticated user",
+      });
     }
+
+    // mark book as favorite
+    book.favorite = true;
+    await book.save();
+
     res
       .status(StatusCodes.OK)
       .json({ msg: "Book marked as favorite successfully", book });
