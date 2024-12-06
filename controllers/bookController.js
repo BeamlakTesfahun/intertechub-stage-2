@@ -133,22 +133,27 @@ const deleteBook = async (req, res) => {
 
 // book recommendation
 const recommendBook = async (req, res) => {
-  const { userId } = req.user;
+  const { userId, role } = req.user;
   try {
-    // count the total number of books created by the user
-    const total = await Book.countDocuments({ createdBy: userId });
+    let recommendations;
 
-    if (total === 0) {
+    if (role === "admin") {
+      // for admin recommend books from all registered books
+      recommendations = await Book.find().limit(5);
+    } else {
+      recommendations = await Book.find({ createdBy: userId }).limit(5);
+
+      if (recommendations.length === 0) {
+        recommendations = await Book.find().sort({ createdAt: -1 }).limit(5);
+      }
+    }
+    if (!recommendations.length) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ msg: "No books are available" });
+        .json({ msg: "No books available for recommendation." });
     }
 
-    const randomNum = Math.floor(Math.random() * total);
-
-    const randomBook = await Book.findOne().skip(randomNum);
-
-    res.status(StatusCodes.OK).json({ recommendation: randomBook });
+    res.status(StatusCodes.OK).json({ recommendations });
   } catch (error) {
     console.log("Error occured while book recommendation", error);
     res
