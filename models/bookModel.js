@@ -13,6 +13,11 @@ const BookSchema = new mongoose.Schema(
     },
     publicationYear: { type: Number, required: true },
     favorite: { type: Boolean, default: false },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // references the user model
+      required: true,
+    },
   },
   {
     timestamps: true,
