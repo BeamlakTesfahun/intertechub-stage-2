@@ -52,7 +52,7 @@ const getBooks = async (req, res) => {
     if (!books.length) {
       return res.status(StatusCodes.NOT_FOUND).json({ msg: "No books found" });
     }
-    res.status(StatusCodes.OK).json({ fetchedBook });
+    res.status(StatusCodes.OK).json({ books });
   } catch (error) {
     console.log("Error fetching books", error);
     res
