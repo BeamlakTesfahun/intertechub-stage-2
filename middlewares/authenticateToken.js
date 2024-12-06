@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 
-const authMiddleware = (req, res, next) => {
+const authenticateToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer")) {
@@ -13,10 +13,14 @@ const authMiddleware = (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const { userId, username } = jwt.verify(token, process.env.JWT_SECRET);
+    const { userId, username, role } = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
     req.user = {
       userId,
       username,
+      role,
     };
 
     next();
@@ -27,4 +31,4 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-export default authMiddleware;
+export default authenticateToken;
