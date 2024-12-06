@@ -4,10 +4,13 @@ import Book from "../models/bookModel.js";
 // add book
 const addBook = async (req, res) => {
   const { title, author, isbn, publicationYear } = req.body;
+  const { userId } = req.user;
+
+  const createdBy = userId;
 
   try {
     // check if book already exists
-    const existingBook = await Book.findOne({ title });
+    const existingBook = await Book.findOne({ title, createdBy });
     if (existingBook) {
       return res
         .status(StatusCodes.BAD_REQUEST)
@@ -19,6 +22,7 @@ const addBook = async (req, res) => {
       author,
       isbn,
       publicationYear,
+      createdBy,
     });
 
     const savedBook = await newBook.save();
@@ -34,18 +38,23 @@ const addBook = async (req, res) => {
   }
 };
 
-// fetch book by id
-const getBook = async (req, res) => {
-  const { id } = req.params;
+// fetch book - specific to a user
+const getBooks = async (req, res) => {
+  const { userId } = req.user;
+  const { favorite } = req.query;
 
   try {
-    const fetchedBook = await Book.findById(id);
-    if (!fetchedBook) {
-      return res.status(StatusCodes.NOT_FOUND).json({ msg: "Book not found" });
+    let query = { createdBy: userId }; // filter by createdBy field
+    if (favorite) {
+      query.favorite = favorite === "true";
+    }
+    const books = await Book.find(query);
+    if (!books.length) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "No books found" });
     }
     res.status(StatusCodes.OK).json({ fetchedBook });
   } catch (error) {
-    console.log("Error fetching book", error);
+    console.log("Error fetching books", error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ msg: "Server error please try again later" });
@@ -174,7 +183,7 @@ const favoriteBook = async (req, res) => {
 
 export {
   addBook,
-  getBook,
+  getBooks,
   getAllBooks,
   updateBook,
   deleteBook,

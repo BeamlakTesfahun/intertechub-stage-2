@@ -1,7 +1,7 @@
 import express from "express";
 import {
   addBook,
-  getBook,
+  getBooks,
   getAllBooks,
   updateBook,
   deleteBook,
@@ -12,15 +12,24 @@ import {
   validateBook,
   handleValidationErrors,
 } from "../middlewares/bookValidator.js";
+import authenticateToken from "../middlewares/authenticateToken.js";
+import { authorizeRole } from "../middlewares/authorizeRole.js";
 
 const router = express.Router();
 
-router.post("/", validateBook, handleValidationErrors, addBook);
-router.get("/", getAllBooks);
-router.get("/recommendations", recommendBook);
-router.put("/favorite/:id", favoriteBook);
-router.get("/:id", getBook);
-router.put("/:id", updateBook);
-router.delete("/:id", deleteBook);
+router.post(
+  "/",
+  validateBook,
+  handleValidationErrors,
+  authenticateToken,
+  authorizeRole(["user"]),
+  addBook
+);
+router.get("/all", authenticateToken, authorizeRole(["admin"]), getAllBooks);
+router.get("/", authenticateToken, getBooks);
+router.get("/recommendations", authenticateToken, recommendBook);
+router.put("/favorite/:id", authenticateToken, favoriteBook);
+router.put("/:id", authenticateToken, authorizeRole(["admin"]), updateBook);
+router.delete("/:id", authenticateToken, authorizeRole(["admin"]), deleteBook);
 
 export default router;
