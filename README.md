@@ -76,7 +76,7 @@ A RESTful API for managing a "Books Collection", developed using Node.js and Mon
 ## Testing Instructions
 
 - Postman Collection: Use the Postman collection for easy testing.
-  [Linnk to Collection](https://documenter.getpostman.com/view/31313072/2sAYBd6TJm)
+  [Link to Collection](https://documenter.getpostman.com/view/31313072/2sAYBd6TJm)
 - Authenticate a user to get a JWT token. Register a new user and login to obtain a JWT token.
 - Include the token in the Authorization header for all protected routes.
 
