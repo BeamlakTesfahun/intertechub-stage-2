@@ -169,7 +169,7 @@ const favoriteBook = async (req, res) => {
 
   try {
     const book = await Book.findByIdAndUpdate({
-      id,
+      _id: id,
       createdBy: userId,
     });
 
