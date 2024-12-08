@@ -26,7 +26,7 @@ router.post(
   addBook
 );
 router.get("/all", authenticateToken, authorizeRole(["admin"]), getAllBooks);
-router.get("/", authenticateToken, getBooks);
+router.get("/", authenticateToken, authorizeRole(["user"]), getBooks);
 router.get("/recommendations", authenticateToken, recommendBook);
 router.put("/favorite/:id", authenticateToken, favoriteBook);
 router.put("/:id", authenticateToken, authorizeRole(["admin"]), updateBook);
